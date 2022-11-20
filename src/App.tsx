@@ -146,7 +146,7 @@ function App(): JSX.Element {
 
     return (
       <div className={"babyName " + getClassForSex(sex)}>
-        <button onClick={() => console.log("hi")}> {name} </button>
+        <button onClick={() => console.log({id})}> {name} </button>
       </div>
     );
   }
