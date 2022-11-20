@@ -69,16 +69,20 @@ function App(): JSX.Element {
       />
   */
 
-
   //return statement
   //this one
 
-  const [currentSearch,setSearch] = React.useState('');
+  const [currentSearch, setSearch] = React.useState("");
 
-  const matchingBabyNames = findMatchingBabyNames( currentSearch.toLowerCase(), BabyNameData);
+  const matchingBabyNames = findMatchingBabyNames(
+    currentSearch.toLowerCase(),
+    BabyNameData.filter((oneNameData) => !FavyNameData.includes(oneNameData))
+  );
 
+  // const matchingBabyNames = findMatchingBabyNames( currentSearch.toLowerCase(), BabyNameData); no filter for FavyNames
+  // BabyNameData.filter(BabyNameData => !FavyNameData.includes(oneNameData))); hope this works>
 
-//get errors attempting to destructure and define type as ChangeEvent? Again weird setup
+  //get errors attempting to destructure and define type as ChangeEvent? Again weird setup
   return (
     //NOTHING ABOVE MASTER DIV
     <div>
@@ -89,8 +93,11 @@ function App(): JSX.Element {
         ))}
       </div>
 
-      <input value={currentSearch}
-        onChange={event => { setSearch(event.target.value) }} //could be onChange={handleSearchTermChange}
+      <input
+        value={currentSearch}
+        onChange={(event) => {
+          setSearch(event.target.value);
+        }} //could be onChange={handleSearchTermChange}
       />
 
       <div className="babyName">
@@ -106,7 +113,7 @@ function App(): JSX.Element {
     //NOTHING BELOW MASTER DIV
   );
 
-/*
+  /*
           to show full list: replace matchingBabyNames with BabyNameData
   <div className="babyNameBox"> 
         {BabyNameData.map((singleBabyData) => (
@@ -115,12 +122,14 @@ function App(): JSX.Element {
       </div>
 */
 
-function searchingOrNot(term:string): string{
-  return term ? 'Seaching for: ' : 'Baby names';
-}
+  function searchingOrNot(term: string): string {
+    return term ? "Seaching for: " : "Baby names";
+  }
 
   function findMatchingBabyNames(term: string, list: BabyData[]): BabyData[] {
-    return list.filter(oneNameData => oneNameData.name.toLowerCase().includes(term));
+    return list.filter((oneNameData) =>
+      oneNameData.name.toLowerCase().includes(term)
+    );
   }
   //{BabyNameData.map(singleBabyData => singleBabyData.name).join(', ')};
 
@@ -137,13 +146,17 @@ function searchingOrNot(term:string): string{
 
     return (
       <div className={"babyName " + getClassForSex(sex)}>
-        <button onClick={()=> console.log('hi')}> {name} </button>
+        <button onClick={() => console.log("hi")}> {name} </button>
       </div>
     );
   }
 
-  /*function addToFaves(props: BabyNameProps): JSX.Element{
-    favyNames.append()
+  /*function adjaustFaves(props: BabyNameProps): JSX.Element{
+    const { name, id, sex } = props.baby;
+    if the id is in FavyNamesData.id
+      Remove name, id and sex from FavyNames
+    else
+      append name, id and sex to FavyNames
   }
   */
   //this just returns the sex for use in the CSS
