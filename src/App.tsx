@@ -141,24 +141,47 @@ function App(): JSX.Element {
 
   //function ThisBaby({props: BabyNameProps}: {babyData: babyData}):JSX.Element {
   function ThisBaby(props: BabyNameProps): JSX.Element {
-    const { name, id, sex } = props.baby; //I don't think I get this line
+    //const { name, id, sex } = props.baby; //I don't think I get this line
     //I get the above is putting the propeties passed into the function into the keys but how? A mystery.
 
+    const ourBaby = {
+      id: props.baby.id,
+      name: props.baby.name,
+      sex: props.baby.sex,
+    };
+
     return (
-      <div className={"babyName " + getClassForSex(sex)}>
-        <button onClick={() => console.log({id})}> {name} </button>
+      <div className={"babyName " + getClassForSex(props.baby.sex)}>
+        <button onClick={() => console.log(adjustFaves(ourBaby))}>
+          {" "}
+          {props.baby.name}{" "}
+        </button>
       </div>
     );
   }
 
-  /*function adjaustFaves(props: BabyNameProps): JSX.Element{
-    const { name, id, sex } = props.baby;
-    if the id is in FavyNamesData.id
-      Remove name, id and sex from FavyNames
-    else
-      append name, id and sex to FavyNames
+  function adjustFaves(ourBaby: BabyData): string {
+    //const { name, id, sex } = props.baby;
+    console.log(ourBaby);
+    const currentId = FavyNameData.find(
+      (singleBabyData) => singleBabyData.id === ourBaby.id
+    ); //filters FavyNames to find the id
+    if (currentId) {
+      //if the id is in FavyNamesData.id
+      const currentIndex = FavyNameData.findIndex(
+        (singleBabyData) => singleBabyData === ourBaby
+      );
+      FavyNameData.splice(currentIndex, 1);
+      return "removed " + ourBaby.id + " from faves! " + FavyNameData;
+    } //Remove name, id and sex from FavyNames
+    else {
+      // might do else if? {
+
+      FavyNameData.splice(0, 0, ourBaby);
+      return "added " + ourBaby.id + " to faves! " + FavyNameData;
+    }
   }
-  */
+
   //this just returns the sex for use in the CSS
   //can define a type Sex{sex:'m'|'f'} but breaks the JSON config
   function getClassForSex(sex: string): string {
