@@ -56,7 +56,6 @@ function App(): JSX.Element {
     baby: BabyData;
   }
 
-  const FavyNameData: BabyData[] = [];
   /*
   const matchingBabyNames = findMatchingBabyNames( searchTerm, allBabyNames);
 
@@ -72,6 +71,8 @@ function App(): JSX.Element {
   //return statement
   //this one
 
+  const [FavyNameData, setFaves] = React.useState<BabyData[]>([]);
+
   const [currentSearch, setSearch] = React.useState("");
 
   const matchingBabyNames = findMatchingBabyNames(
@@ -86,10 +87,10 @@ function App(): JSX.Element {
   return (
     //NOTHING ABOVE MASTER DIV
     <div>
-      <div>
-        <p className="babyName">Favy Names</p>
+      <p className="babyName">Favy Names</p>
+      <div className="babyNameBox">
         {FavyNameData.map((singleBabyData) => (
-          <ThisBaby baby={singleBabyData} key={singleBabyData.id} />
+          <ThatBaby baby={singleBabyData} key={singleBabyData.id} />
         ))}
       </div>
 
@@ -152,7 +153,9 @@ function App(): JSX.Element {
 
     return (
       <div className={"babyName " + getClassForSex(props.baby.sex)}>
-        <button onClick={() => console.log(adjustFaves(ourBaby))}>
+        <button
+          onClick={() => setFaves((prevFaves) => [...prevFaves, ourBaby])}
+        >
           {" "}
           {props.baby.name}{" "}
         </button>
@@ -160,9 +163,40 @@ function App(): JSX.Element {
     );
   }
 
-  function adjustFaves(ourBaby: BabyData): string {
+  function ThatBaby(props: BabyNameProps): JSX.Element {
+    //const { name, id, sex } = props.baby; //I don't think I get this line
+    //I get the above is putting the propeties passed into the function into the keys but how? A mystery.
+
+    const ourBaby = {
+      id: props.baby.id,
+      name: props.baby.name,
+      sex: props.baby.sex,
+    };
+    const currentIndex = FavyNameData.findIndex(
+      (singleBabyData) => singleBabyData === ourBaby
+    );
+
+    return (
+      <div className={"babyName " + getClassForSex(props.baby.sex)}>
+        <button
+          onClick={() =>
+            setFaves((prevFaves) => prevFaves.splice(currentIndex, 1))
+          }
+        >
+          {" "}
+          {props.baby.name}{" "}
+        </button>
+      </div>
+    );
+  }
+
+  //change above so that adjustFaves is part of the button maybe? closer to get Class for sex
+
+  /*.filter((thisBaby) => thisBaby!==ourBaby)
+  function adjustFaves(ourBaby: BabyData): BabyData[] {
     //const { name, id, sex } = props.baby;
     console.log(ourBaby);
+    console.log(FavyNameData);
     const currentId = FavyNameData.find(
       (singleBabyData) => singleBabyData.id === ourBaby.id
     ); //filters FavyNames to find the id
@@ -171,17 +205,17 @@ function App(): JSX.Element {
       const currentIndex = FavyNameData.findIndex(
         (singleBabyData) => singleBabyData === ourBaby
       );
-      FavyNameData.splice(currentIndex, 1);
-      return "removed " + ourBaby.id + " from faves! " + FavyNameData;
+      console.log("removed " + ourBaby.id + " from faves! " + FavyNameData);
+      return FavyNameData.splice(currentIndex, 1);
     } //Remove name, id and sex from FavyNames
     else {
       // might do else if? {
 
-      FavyNameData.splice(0, 0, ourBaby);
-      return "added " + ourBaby.id + " to faves! " + FavyNameData;
+      console.log("added " + ourBaby.id + " to faves! " + FavyNameData);
+      return FavyNameData.splice(0, 0, ourBaby);
     }
   }
-
+*/
   //this just returns the sex for use in the CSS
   //can define a type Sex{sex:'m'|'f'} but breaks the JSON config
   function getClassForSex(sex: string): string {
