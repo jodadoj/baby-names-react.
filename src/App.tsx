@@ -73,6 +73,9 @@ function App(): JSX.Element {
 
   const [FavyNameData, setFaves] = React.useState<BabyData[]>([]);
 
+  //const [currentBaby, setBaby] = React.useState<BabyData>(); //might have to rerender currentBaby?
+  // glitch where clicking an item gets rid of everything but last added element
+
   const [currentSearch, setSearch] = React.useState("");
 
   const matchingBabyNames = findMatchingBabyNames(
@@ -167,7 +170,7 @@ function App(): JSX.Element {
     //const { name, id, sex } = props.baby; //I don't think I get this line
     //I get the above is putting the propeties passed into the function into the keys but how? A mystery.
 
-    const ourBaby = {
+    const ourBaby: BabyData = {
       id: props.baby.id,
       name: props.baby.name,
       sex: props.baby.sex,
@@ -175,6 +178,8 @@ function App(): JSX.Element {
     const currentIndex = FavyNameData.findIndex(
       (singleBabyData) => singleBabyData === ourBaby
     );
+
+    console.log(currentIndex);
 
     return (
       <div className={"babyName " + getClassForSex(props.baby.sex)}>
